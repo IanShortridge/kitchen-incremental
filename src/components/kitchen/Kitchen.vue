@@ -28,7 +28,15 @@
                                 </div>
                             </div>
                             <div v-show="menuSelected('upgrades')">
-                                upgrades
+                                <div v-for="upgrade in upgrades" v-bind:key="upgrade.id">
+                                    <ingredient :id=upgrade.id
+                                                :name="upgrade.name"
+                                                :cost="upgrade.cost"
+                                                :description="upgrade.description"
+                                                :bought="upgrade.bought"
+                                                :show="upgrade.active"
+                                                @upgradeBought="buyUpgrade"/>
+                                </div>
                             </div>
                         </div>
                     </b-col>
@@ -61,7 +69,7 @@ import Ingredient from "./Ingredient";
 import BreadImage from "./BreadImage";
 import gameFunctions from "../util/gameFunctions";
 import Big from 'big.js';
-import {ingredientsList} from './kitchenConstants'
+import {ingredientsList, upgradesList} from './kitchenConstants'
 
 export default {
     name: 'Kitchen',
@@ -78,6 +86,7 @@ export default {
             allTimeFocus: new Big(0),
             tickSpeed: new Big(1000),
             ingredients: ingredientsList,
+            upgrades: upgradesList,
             prestige: {
                 sardines: { name: 'Sardines', value: new Big(0), multiplier: new Big(2) },
                 caviar: { name: 'Caviar', value: new Big(0), multiplier: new Big(2) },
@@ -194,13 +203,19 @@ export default {
             }
             return result;
         },
-        checkActiveUpgrades: function(upgrade) {
-            let self = this;
-            let result = false;
-            switch (upgrade.id) {
-                case ''
-            }
-        }
+        // checkActiveUpgrades: function(upgrade) {
+        //     let self = this;
+        //     let result = false;
+        //     switch (upgrade.id) {
+        //         case 'test':
+        //             result = 'hi';
+        //             break;
+        //         default:
+        //             console.log('item not found');
+        //             result = false;
+        //     }
+        //     return result;
+        // },
     },
     computed: {
         pauseButtonTxt: function() {
