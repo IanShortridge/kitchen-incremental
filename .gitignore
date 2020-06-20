@@ -20,7 +20,7 @@
 /nbproject/private/
 /build/
 /nbbuild/
-#/dist/
+/dist/
 /nbdist/
 /.nb-gradle/
 
@@ -29,6 +29,6 @@ src/main/resources/static/
 .DS_Store
 node_modules/
 node/
-#dist/
+dist/
 npm-debug.log
 yarn-error.log
