@@ -29,6 +29,6 @@ src/main/resources/static/
 .DS_Store
 node_modules/
 node/
-dist/
+#dist/
 npm-debug.log
 yarn-error.log
