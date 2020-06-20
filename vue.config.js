@@ -1,4 +1,5 @@
-// vue.config.js
 module.exports = {
-publicPath: '/kitchen-incremental/'
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/kitchen-incremental/'
+        : '/'
 }
