@@ -2,13 +2,13 @@
     <div>
         <b-container fluid="lg">
             <b-row>
-                <b-col>
+                <b-col cols="4">
                     <div class="title-text"><h3>Kitchen Incremental</h3></div>
                 </b-col>
                 <b-col>
                     <div class="text-center">Money: {{ money }}</div>
                 </b-col>
-                <b-col>
+                <b-col @mouseenter="$emit('hoverStart')" @onmouseleave="$emit('hoverEnd')">
                     <div class="text-center">Focus: {{ focus }}</div>
                 </b-col>
                 <b-col>
@@ -18,6 +18,7 @@
                         <b-dropdown right text="Options" variant="info">
                             <b-dropdown-item @click="$emit('export')">Export Game</b-dropdown-item>
                             <b-dropdown-item @click="$emit('import')">Import Game</b-dropdown-item>
+<!--                            <b-dropdown-item @click="$emit('load')">Load Game</b-dropdown-item>-->
                             <b-dropdown-divider></b-dropdown-divider>
                             <b-dropdown-item @click="$emit('achievements')">Achievements</b-dropdown-item>
                         </b-dropdown>

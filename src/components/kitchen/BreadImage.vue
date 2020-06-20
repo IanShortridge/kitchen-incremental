@@ -12,7 +12,7 @@
         name: 'Ingredient',
         props: {
             helperAmount : {
-                type : [Number],
+                type : [Object],
                 required : true,
             },
         },
@@ -47,7 +47,7 @@
             },
             checkLoop: function() {
                 if(this.mouseInPlay) {
-                    this.progress = this.progress + this.helperAmount + 5;
+                    this.progress = this.progress + parseFloat(this.helperAmount.toString()) + 5;
                     console.log(this.progress);
                     if(this.progress > this.maxProgress) {
                         this.progress = 0;
