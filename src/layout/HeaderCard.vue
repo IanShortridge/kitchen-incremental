@@ -3,7 +3,16 @@
         <b-container fluid="lg">
             <b-row>
                 <b-col cols="4">
-                    <div class="title-text"><h3>Kitchen Incremental</h3></div>
+                    <div v-if="!canEditTitle" class="title-text"><h3><span>{{ title }}</span></h3></div>
+                    <div v-if="canEditTitle" class="title-text" @click="editMode=true">
+                        <div v-if="editMode">
+                            <input v-model="title"/>
+                            <b-button v-on:click.stop="editMode=false" variant="outline-secondary" size="sm" pill>{{ saveText }}</b-button>
+                        </div>
+                        <div v-if="!editMode">
+                            <h3>{{ title }}</h3>
+                        </div>
+                    </div>
                 </b-col>
                 <b-col>
                     <div class="text-center">Money: {{ money }}</div>
@@ -41,11 +50,17 @@
                 type : [String],
                 required: true,
             },
+            canEditTitle : {
+                type : [Boolean],
+                required: true,
+            }
         },
         data: function() {
             return {
                 loaded: false,
                 saveText: 'Save',
+                title: 'Kitchen Incremental',
+                editMode: false,
             }
         },
         created: function() {

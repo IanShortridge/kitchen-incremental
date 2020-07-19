@@ -7,6 +7,7 @@
         <div class="card-header">
             <header-card :money="filteredMoney"
                          :focus="filteredFocus"
+                         :can-edit-title="creditsClickedAchievementUnlocked"
                          @credits="openCreditsModal"
                          @export="openExportModal"
                          @import="openImportModal"
@@ -153,7 +154,7 @@ export default {
             focus: new Big(0),
             allTimeMoney: new Big(0),
             allTimeFocus: new Big(0),
-            allTimeClicks: 0,
+            allTimeClicks: new Big(0),
             tickSpeed: new Big(1000),
             ingredients: ingredientsList,
             upgrades: upgradesList,
@@ -169,6 +170,7 @@ export default {
             exportTextArea: '',
             mpsBonus: new Big(1),
             clickMultiplier: new Big(1),
+            focusMultiplier: new Big(1),
             kneadmasterMultiplier: new Big(1),
             kathuluUnlocked: false,
             eventsUnlocked: false,
@@ -199,11 +201,12 @@ export default {
             this.triggerUpgradeVisibility();
         },
         breadClick: function() {
-            this.addMoney(this.clickMultiplier);
-            this.allTimeClicks++;
+            let pauseAcheivementAmt = this.switcherAchievementUnlocked ? new Big(1.1) : new Big(1);
+            this.addMoney(this.clickMultiplier.times(this.clickAchievementAmount).times(pauseAcheivementAmt));
+            this.allTimeClicks = this.allTimeClicks.plus(1);
         },
         breadProgress: function() {
-            this.addFocus(new Big(1));
+            this.addFocus(this.focusMultiplier.times(this.focusAchievementAmount));
         },
         buyIngredient: function(ingredient) {
             let ing = this.ingredients.find( ({ id }) => id === ingredient );
@@ -308,7 +311,7 @@ export default {
         runGame: function(delta) {
             let self = this;
             let numberOfTicks = delta.div(this.tickSpeed);
-            console.log(numberOfTicks.toString());
+            // console.log(numberOfTicks.toString());
             self.ingredients.forEach((ing)=> {
                 let moneyToGenerate = new Big(0);
                 if(ing.value.gt(new Big(0)) && ing.active && ing.id !== 'kneadmasters' && ing.id !== 'meat') {

@@ -1,4 +1,5 @@
 import moment from "moment";
+import {Big} from "big.js";
 
 export default {
     data: function() {
@@ -15,6 +16,8 @@ export default {
             pauseAchievementLoop: null,
             gamePausedAchievementLoop: null,
             focusHoverLoop: null,
+            clickAchievementAmount: new Big(1),
+            focusAchievementAmount: new Big(1)
         }
     },
     methods: {
@@ -35,83 +38,103 @@ export default {
             let delta = null;
             switch (achieve.id) {
                 case 'clicks1':
-                    if(this.allTimeClicks > 100) {
+                    if(this.allTimeClicks.gt(new Big(100))) {
                         this.unlockAchievement(achieve);
+                        this.clickAchievementAmount = this.clickAchievementAmount.plus(new Big(1));
                     }
                     break;
                 case 'clicks2':
-                    if(this.allTimeClicks > 1000) {
+                    if(this.allTimeClicks.gt(new Big(1000))) {
                         this.unlockAchievement(achieve);
+                        this.clickAchievementAmount = this.clickAchievementAmount.plus(new Big(5));
                     }
                     break;
                 case 'clicks3':
-                    if(this.allTimeClicks > 10000) {
+                    if(this.allTimeClicks.gt(new Big(10000))) {
                         this.unlockAchievement(achieve);
+                        this.clickAchievementAmount = this.clickAchievementAmount.plus(new Big(10));
                     }
                     break;
                 case 'clicks4':
-                    if(this.allTimeClicks > 150000) {
+                    if(this.allTimeClicks.gt(new Big(150000))) {
                         this.unlockAchievement(achieve);
+                        this.clickAchievementAmount = this.clickAchievementAmount.plus(new Big(25));
                     }
                     break;
                 case 'clicks5':
-                    if(this.allTimeClicks > 300000) {
+                    if(this.allTimeClicks.gt(new Big(300000))) {
                         this.unlockAchievement(achieve);
+                        this.clickMultiplier = this.clickMultiplier.times(new Big(4));
                     }
                     break;
                 case 'focus1':
-                    if(this.allTimeFocus > 10) {
+                    if(this.allTimeFocus.gt(new Big(10))) {
                         this.unlockAchievement(achieve);
+                        this.focusAchievementAmount = this.focusAchievementAmount.plus(1);
                     }
                     break;
                 case 'focus2':
-                    if(this.allTimeClicks > 100) {
+                    if(this.allTimeClicks.gt(new Big(100))) {
                         this.unlockAchievement(achieve);
+                        this.focusAchievementAmount = this.focusAchievementAmount.plus(2);
                     }
                     break;
                 case 'focus3':
-                    if(this.allTimeClicks > 3000) {
+                    if(this.allTimeClicks.gt(new Big(3000))) {
                         this.unlockAchievement(achieve);
+                        this.focusAchievementAmount = this.focusAchievementAmount.plus(3);
                     }
                     break;
                 case 'focus4':
-                    if(this.allTimeClicks > 10000) {
+                    if(this.allTimeClicks.gt(new Big(10000))) {
                         this.unlockAchievement(achieve);
+                        this.focusAchievementAmount = this.focusAchievementAmount.plus(4);
                     }
                     break;
                 case 'focus5':
-                    if(this.allTimeClicks > 50000) {
+                    if(this.allTimeClicks.gt(new Big(50000))) {
                         this.unlockAchievement(achieve);
+                        this.focusMultiplier = this.focusMultiplier.times(new Big(2));
                     }
                     break;
                 case 'played1':
                     delta = new moment().diff(this.firstStarted, 'hours');
                     if(delta > 1) {
                         this.unlockAchievement(achieve);
+                        let percentToRemove = new Big(100);
+                        this.tickSpeed = this.tickSpeed.minus(percentToRemove);
                     }
                     break;
                 case 'played2':
                     delta = new moment().diff(this.firstStarted, 'hours');
                     if(delta > 10) {
                         this.unlockAchievement(achieve);
+                        let percentToRemove = new Big(100).times(new Big(2));
+                        this.tickSpeed = this.tickSpeed.minus(percentToRemove);
                     }
                     break;
                 case 'played3':
                     delta = new moment().diff(this.firstStarted, 'days');
                     if(delta > 2) {
                         this.unlockAchievement(achieve);
+                        let percentToRemove = new Big(100).times(new Big(3));
+                        this.tickSpeed = this.tickSpeed.minus(percentToRemove);
                     }
                     break;
                 case 'played4':
                     delta = new moment().diff(this.firstStarted, 'days');
                     if(delta > 7) {
                         this.unlockAchievement(achieve);
+                        let percentToRemove = new Big(100).times(new Big(4));
+                        this.tickSpeed = this.tickSpeed.minus(percentToRemove);
                     }
                     break;
                 case 'played5':
                     delta = new moment().diff(this.firstStarted, 'days');
                     if(delta > 30) {
                         this.unlockAchievement(achieve);
+                        let percentToRemove = new Big(100).times(new Big(10));
+                        this.tickSpeed = this.tickSpeed.minus(percentToRemove);
                     }
                     break;
                 case 'switcher':
@@ -122,11 +145,15 @@ export default {
                 case 'paused':
                     if(this.pausedAchievementUnlocked) {
                         this.unlockAchievement(achieve);
+                        this.mpsBonus = this.mpsBonus.plus(new Big(0.02));
+                        this.recalcAllMps();
                     }
                     break;
                 case 'wrongHover':
                     if(this.wrongHoverAchievementUnlocked) {
                         this.unlockAchievement(achieve);
+                        this.mpsBonus = this.mpsBonus.plus(1)
+                        this.recalcAllMps();
                     }
                     break;
                 case 'creditsClicked':
@@ -137,11 +164,15 @@ export default {
                 case 'asked':
                     if(this.askedAchievementUnlocked) {
                         this.unlockAchievement(achieve);
+                        this.mpsBonus = this.mpsBonus.plus(new Big(0.02));
+                        this.recalcAllMps();
                     }
                     break;
                 case 'specificGoals':
                     if(this.specificGoalsAchievementUnlocked) {
                         this.unlockAchievement(achieve);
+                        this.mpsBonus = this.mpsBonus.plus(new Big(0.069));
+                        this.recalcAllMps();
                     }
                     break;
                 default:

@@ -95,7 +95,7 @@ export default {
                 this.allTimeMoney = new Big(gameObject.allTimeMoney);
                 this.allTimeFocus = new Big(gameObject.allTimeFocus);
                 this.tickSpeed = new Big(gameObject.tickSpeed);
-                this.allTimeClicks = gameObject.allTimeClicks;
+                this.allTimeClicks = new Big(gameObject.allTimeClicks);
                 this.switcherAchievementUnlocked = gameObject.switcherAchievementUnlocked;
                 this.pausedAchievementUnlocked = gameObject.pausedAchievementUnlocked;
                 this.wrongHoverAchievementUnlocked = gameObject.wrongHoverAchievementUnlocked;
